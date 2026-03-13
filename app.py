@@ -1,0 +1,86 @@
+import streamlit as st
+import time
+--- إعدادات الواجهة ---
+st.set_page_config(page_title="فزعة جار Pro", page_icon="🤝", layout="wide")
+st.markdown(f"""
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+html, body, [class*="css"] {{ font-family: 'Cairo', sans-serif; text-align: right; direction: rtl; }}
+.main {{ background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); }}
+.stButton>button {{
+background: linear-gradient(90deg, #8338EC, #00AC73);
+color: white; border-radius: 25px; border: none; padding: 20px;
+font-size: 20px; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}}
+.metric-card {{
+background: white; padding: 15px; border-radius: 15px;
+text-align: center; border-top: 5px solid #8338EC;
+}}
+.neighbor-card {{
+background: white; padding: 20px; border-radius: 20px;
+border-right: 10px solid #00AC73; margin-bottom: 20px;
+}}
+.badge {{
+background-color: #FFD700; color: black; padding: 5px 10px;
+border-radius: 10px; font-size: 12px; font-weight: bold;
+}}
+</style>
+""", unsafe_allow_html=True)
+--- حالة التطبيق ---
+if 'step' not in st.session_state: st.session_state.step = 'home'
+--- الشاشة الرئيسية ---
+if st.session_state.step == 'home':
+col1, col2 = st.columns([2, 1])
+    with col2:
+        st.markdown('<div class="metric-card"><h4>رصيدك الاجتماعي</h4><h2 style="color:#8338EC">⭐ 1,250</h2><p>رتبة: <b>جار فزّاع</b></p></div>', unsafe_allow_html=True)
+        st.markdown('<div class="metric-card"><h4>توفير الحي</h4><h2 style="color:#00AC73">4,500 ريال</h2><p>بفضل التشارك</p></div>', unsafe_allow_html=True)
+
+    with col1:
+        st.title("🤝 فزعة جار")
+        st.subheader("وش ينقصك اليوم؟")
+        
+        items = {
+            "🚗 اشتراك سيارة": "حاجة عاجلة",
+            "🔨 دريل (مثقاب)": "أدوات",
+            "🪜 سلم طويل": "أدوات",
+            "📦 مساعدة في نقل": "مجهود بدني"
+        }
+        selection = st.selectbox("", ["اختر من القائمة..."] + list(items.keys()))
+        
+        if selection != "اختر من القائمة...":
+            if st.button("اطلب الفزعة الآن"):
+                st.session_state.step = 'scanning'
+                st.rerun()
+
+--- شاشة الرادار (بصرياً رهيبة) ---
+elif st.session_state.step == 'scanning':
+st.title("🔍 جاري فحص الجوار...")
+with st.empty():
+for i in range(3):
+st.write("📡 يتم الآن فحص نطاق 250 متر...")
+time.sleep(1)
+st.write("🤖 خوارزمية النخوة تحلل الجيران المتاحين...")
+time.sleep(1)
+st.session_state.step = 'result'
+st.rerun()
+--- شاشة النتيجة (التفاصيل) ---
+elif st.session_state.step == 'result':
+st.balloons()
+st.success("تم العثور على جار مستعد للفزعة!")
+    st.markdown(f"""
+        <div class="neighbor-card">
+            <h3>أبشر بسعدك! الجار صالح محمد قبل طلبك</h3>
+            <p><span class="badge">🥇 جار ذهبي</span> | موثق عبر نفاذ ✅</p>
+            <hr>
+            <p>📍 <b>الموقع:</b> فيلا رقم 14 (بعد 3 بيوت عنك)</p>
+            <p>⏱️ <b>الوقت المقدر:</b> جاهز الآن</p>
+            <p>💬 <b>ملاحظة صالح:</b> "حياك يا جاري، الدريل موجود ونوعه بوش أصلي."</p>
+        </div>
+    """, unsafe_allow_html=True)
+    
+    col_a, col_b = st.columns(2)
+    if col_a.button("فتح المحادثة"): st.info("جاري فتح المحادثة المشفرة...")
+    if col_b.button("إتمام الفزعة"): 
+        st.session_state.step = 'home'
+        st.toast("تم إضافة 50 نقطة لرصيدك وصالح!")
+        st.rerun()
